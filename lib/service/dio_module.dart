@@ -11,9 +11,6 @@ class DioModule {
       return _dio!;
     }
     BaseOptions options = BaseOptions(
-      //baseUrl: 'http://10.0.2.2:3333/',
-      //baseUrl: 'http://192.168.1.101:1337' // local address
-      //baseUrl: 'https://testingservices321.azurewebsites.net' //cloud
       baseUrl: 'https://reqres.in/',
     );
     _dio = Dio(options);
