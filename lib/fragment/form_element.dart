@@ -8,6 +8,8 @@ import 'package:sizer/sizer.dart';
 enum FieldType {
   textField,
   password,
+  dateTime,
+  search,
 }
 
 class FormElement<T> extends StatefulWidget {
@@ -153,6 +155,40 @@ class _FormElementState extends State<FormElement> {
                       decoration: InputDecoration(hintText: widget.hintText),
                       keyboardType: TextInputType.text,
                       validator: widget.validator,
+                    );
+
+                  case FieldType.dateTime:
+                    return FormBuilderDateTimePicker(
+                      maxLines: 1,
+                      inputFormatters: widget.inputFormatters,
+                      controller: widget.controller,
+                      initialValue: widget.initialValue,
+                      onChanged: widget.onChanged,
+                      inputType: InputType.date,
+                      name: widget.name,
+                      focusNode: widget.focusNode,
+                      keyboardAppearance: Brightness.light,
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(hintText: widget.hintText),
+                    );
+
+                  case FieldType.search:
+                    return FormBuilderTextField(
+                      maxLines: 1,
+                      inputFormatters: widget.inputFormatters,
+                      controller: widget.controller,
+                      initialValue: widget.initialValue,
+                      onChanged: widget.onChanged,
+                      name: widget.name,
+                      focusNode: widget.focusNode,
+                      keyboardAppearance: Brightness.light,
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        hintText: widget.hintText,
+                        prefixIcon: const Icon(Icons.search),
+                      ),
                     );
 
                   default:

@@ -21,8 +21,8 @@ class CommonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: Container(
+        onTap: onTap,
+        child: Container(
           decoration: BoxDecoration(
             color: AppColor.themeColor,
             borderRadius: BorderRadius.circular(radius),
@@ -35,38 +35,43 @@ class CommonButton extends StatelessWidget {
             style: TextStyle(color: AppColor.whiteColor, fontSize: 15.sp),
           ),
         ),
-  );
+      );
 }
 
-class CircleButton extends StatelessWidget {
-  final Widget icon;
-  final VoidCallback onPressed;
+class BorderedButton extends StatelessWidget {
+  final VoidCallback onTap;
   final Color backgroundColor;
-  final Color? foregroundColor;
-  final EdgeInsetsGeometry? padding;
-  final bool mini;
+  final String actionTitle;
+  late final double width;
+  late final double height;
 
-  const CircleButton({
-    required this.icon,
-    required this.onPressed,
-    this.backgroundColor = Colors.white,
-    this.foregroundColor,
-    this.padding,
-    this.mini = false,
-    Key? key,
-  }) : super(key: key);
+  BorderedButton({
+    super.key,
+    required this.onTap,
+    required this.actionTitle,
+    this.backgroundColor = AppColor.themeColor,
+    double? width,
+  }) : width = width ?? 40.w;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: padding,
-      child: FloatingActionButton(
-        onPressed: onPressed,
-        foregroundColor: foregroundColor,
-        backgroundColor: backgroundColor,
-        heroTag: key,
-        mini: mini,
-        child: icon,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColor.themeColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10.sp),
+            bottomRight: Radius.circular(10.sp),
+          ),
+        ),
+        alignment: Alignment.center,
+        width: width,
+        padding: EdgeInsets.symmetric(vertical: 1.5.h),
+        child: Text(
+          actionTitle,
+          style: TextStyle(color: AppColor.whiteColor, fontSize: 12.sp),
+        ),
       ),
     );
   }

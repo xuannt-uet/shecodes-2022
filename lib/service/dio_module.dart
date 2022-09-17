@@ -15,8 +15,14 @@ class DioModule {
     );
     _dio = Dio(options);
 
-    _dio!.interceptors
-        .add(PrettyDioLogger(request: true, requestBody: false, responseBody: false, requestHeader: false));
+    _dio!.interceptors.add(
+      PrettyDioLogger(
+        request: true,
+        requestBody: false,
+        responseBody: false,
+        requestHeader: false,
+      ),
+    );
     // _dio!.interceptors.add(RetryInterceptor(
     //   dio: dio,
     //   logPrint: print, // specify log function (optional)
