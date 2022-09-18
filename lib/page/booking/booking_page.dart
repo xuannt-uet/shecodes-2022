@@ -85,19 +85,6 @@ class _BookingPageState extends State<BookingPage> {
   }
 
   Widget chooseTimeSlotsWidget() {
-    final timeSlot = TimeSlot(
-      value: DateTime.now(),
-      freeTime: [
-        DateTime.parse('2022-09-18 08:15:04Z'),
-        DateTime.parse('2022-09-18 09:15:04Z'),
-        DateTime.parse('2022-09-18 09:45:04Z'),
-        DateTime.parse('2022-09-18 10:30:04Z'),
-        DateTime.parse('2022-09-18 10:55:04Z'),
-        DateTime.parse('2022-09-18 11:00:04Z'),
-        DateTime.parse('2022-09-18 11:15:04Z'),
-        DateTime.parse('2022-09-18 12:00:04Z'),
-      ],
-    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -113,16 +100,22 @@ class _BookingPageState extends State<BookingPage> {
           margin: EdgeInsets.only(top: 1.h),
           alignment: Alignment.center,
           child: Wrap(
-            children: timeSlot.freeTime!
+            children: _bookingCubit.timeSlot.freeTime!
+                .asMap()
+                .entries
                 .map(
                   (e) => Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1.h),
-                    child: BorderedButton(
-                      width: 20.w,
-                      onTap: () {
-                        setState(() {});
-                      },
-                      actionTitle: DateFormat('hh:mm').format(e),
+                    child: Opacity(
+                      opacity: _bookingCubit.listTapped[e.key] ? 1 : 0.5,
+                      child: BorderedButton(
+                        width: 20.w,
+                        onTap: () {
+                          _bookingCubit.listTapped[e.key] = !_bookingCubit.listTapped[e.key];
+                          setState(() {});
+                        },
+                        actionTitle: DateFormat('hh:mm').format(e.value),
+                      ),
                     ),
                   ),
                 )
@@ -134,12 +127,6 @@ class _BookingPageState extends State<BookingPage> {
   }
 
   Widget chooseServices() {
-    final services = [
-      ServiceModel(name: 'Nho rang khon', price: 200000, rating: 4),
-      ServiceModel(name: 'Nho rang khon', price: 200000, rating: 5),
-      ServiceModel(name: 'Nho rang khon', price: 120000, rating: 4.8),
-      ServiceModel(name: 'Nho rang khon', price: 233000, rating: 3),
-    ];
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: EdgeInsets.only(left: 2.w, top: 2.h),
@@ -148,25 +135,28 @@ class _BookingPageState extends State<BookingPage> {
           style: TextStyle(color: AppColor.textColor, fontSize: 14.sp),
         ),
       ),
-      ...services
+      ..._bookingCubit.services
+          .asMap()
+          .entries
           .map(
             (e) => Padding(
               padding: EdgeInsets.symmetric(vertical: 1.h),
               child: CheckboxListTile(
-                value: _bookingCubit.servicesSelected.contains(e),
+                value: _bookingCubit.listSelect[e.key],
                 dense: true,
                 contentPadding: EdgeInsets.zero,
                 onChanged: (bool? value) {
-
+                  _bookingCubit.listSelect[e.key] = value!;
+                  setState(() {});
                 },
                 activeColor: AppColor.themeColor,
                 controlAffinity: ListTileControlAffinity.leading,
                 title: RichText(
                   text: TextSpan(
-                    text: '${e.name}\n',
+                    text: '${e.value.name}\n',
                     style: TextStyle(fontSize: 14.sp, color: AppColor.textColor),
                     children: <TextSpan>[
-                      TextSpan(text: 'Price: ${e.price}', style: const TextStyle(color: AppColor.starColor)),
+                      TextSpan(text: 'Price: ${e.value.price}', style: const TextStyle(color: AppColor.starColor)),
                     ],
                   ),
                 ),
@@ -181,7 +171,15 @@ class _BookingPageState extends State<BookingPage> {
     return Center(
       child: CommonButton(
         onTap: () {
-          Navigator.pushNamed(context, RouteDefine.bookingDetails.name);
+          // Navigator.pushNamed(context, RouteDefine.bookingDetails.name);
+          showDialog(
+            context: context,
+            builder: (context) {
+              return const AlertDialog(
+                title: Text('Request has been sent. Thank you!'),
+              );
+            },
+          ).whenComplete(() => Navigator.pushReplacementNamed(context, RouteDefine.home.name));
         },
         width: 80.w,
         actionTitle: 'Book appointment',
