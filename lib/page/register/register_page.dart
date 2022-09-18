@@ -26,9 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
       listener: (context, state) {
         if (state is RegisterSuccess) {
           EasyLoading.dismiss();
-          const snackBar = SnackBar(
-            content: Text('Register success!'),
-          );
+          Navigator.pushReplacementNamed(context, RouteDefine.home.name);
         }
         if (state is RegisterLoading) {
           EasyLoading.show();

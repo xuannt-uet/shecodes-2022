@@ -11,7 +11,7 @@ class DioModule {
       return _dio!;
     }
     BaseOptions options = BaseOptions(
-      baseUrl: 'https://reqres.in/',
+      baseUrl: 'https://she-code-2022.herokuapp.com/',
     );
     _dio = Dio(options);
 

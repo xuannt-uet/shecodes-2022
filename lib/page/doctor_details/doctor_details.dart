@@ -3,28 +3,19 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shecodes2022/config/app_color.dart';
 import 'package:shecodes2022/fragment/common_buttom.dart';
 import 'package:shecodes2022/model/doctor/doctor.dart';
+import 'package:shecodes2022/utils/app_routing.dart';
 import 'package:sizer/sizer.dart';
 
 class DoctorDetails extends StatefulWidget {
-  final String doctorId;
+  final Doctor doctor;
 
-  const DoctorDetails({Key? key, required this.doctorId}) : super(key: key);
+  const DoctorDetails({Key? key, required this.doctor}) : super(key: key);
 
   @override
   State<DoctorDetails> createState() => _DoctorDetailsState();
 }
 
 class _DoctorDetailsState extends State<DoctorDetails> {
-  final doctor = Doctor(
-    name: 'Doctor 2',
-    phoneNumber: '08826362',
-    rating: 4.5,
-    dateOfBirth: DateTime(1997, 08, 15),
-    address: 'so 1 duong NDC',
-    description: 'ABC doctor provjp benh nao cung chua duoc nao cung chua duoc',
-    avatar: 'https://vfdc.com.vn/wp-content/uploads/2020/12/wysiwyg-uploads_1569586526901-doctor.jpg',
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +75,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                   padding: EdgeInsets.only(right: 4.w),
                   child: CircleAvatar(
                     radius: 10.w,
-                    backgroundImage: NetworkImage(doctor.avatar!),
+                    backgroundImage: NetworkImage(widget.doctor.avatar!),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
@@ -92,7 +83,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      doctor.name!,
+                      widget.doctor.name!,
                       style: TextStyle(color: AppColor.whiteColor, fontWeight: FontWeight.w700, fontSize: 18.sp),
                     ),
                     Row(
@@ -111,7 +102,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
                         SizedBox(width: 2.w),
                         RichText(
                           text: TextSpan(
-                            text: '${doctor.rating}\n',
+                            text: '${widget.doctor.rating}\n',
                             style: TextStyle(color: AppColor.whiteColor, fontWeight: FontWeight.w500, fontSize: 11.sp),
                             children: const <TextSpan>[
                               TextSpan(text: 'rating'),
@@ -134,9 +125,9 @@ class _DoctorDetailsState extends State<DoctorDetails> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        BorderedButton(onTap: () {}, actionTitle: 'Audio call', width: 30.w),
-        BorderedButton(onTap: () {}, actionTitle: 'Video call', width: 30.w),
-        BorderedButton(onTap: () {}, actionTitle: 'Message call', width: 30.w),
+        BorderedButton(onTap: () {}, actionTitle: 'Audio call', width: 28.w),
+        BorderedButton(onTap: () {}, actionTitle: 'Video call', width: 28.w),
+        BorderedButton(onTap: () {}, actionTitle: 'Message', width: 28.w),
       ],
     );
   }
@@ -153,7 +144,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
               color: Colors.amber,
             ),
             itemSize: 18,
-            rating: doctor.rating!,
+            rating: widget.doctor.rating!,
           ),
           SizedBox(height: 2.h),
           Text(
@@ -166,7 +157,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
           ),
           SizedBox(height: 2.h),
           Text(
-            doctor.description!,
+            widget.doctor.description!,
             style: TextStyle(
               color: AppColor.textColor,
               fontWeight: FontWeight.w400,
@@ -189,7 +180,9 @@ class _DoctorDetailsState extends State<DoctorDetails> {
 
   Widget bookAppointmentButton() {
     return CommonButton(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, RouteDefine.booking.name);
+      },
       width: 80.w,
       actionTitle: 'Book appointment',
     );

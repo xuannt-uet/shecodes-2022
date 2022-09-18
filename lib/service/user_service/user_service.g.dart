@@ -3,22 +3,6 @@
 part of 'user_service.dart';
 
 // **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
-
-CreateUserParams _$CreateUserParamsFromJson(Map<String, dynamic> json) =>
-    CreateUserParams(
-      job: json['job'] as String,
-      name: json['name'] as String,
-    );
-
-Map<String, dynamic> _$CreateUserParamsToJson(CreateUserParams instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'job': instance.job,
-    };
-
-// **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
@@ -35,27 +19,50 @@ class _UserService implements UserService {
   String? baseUrl;
 
   @override
-  Future<List<User>> login(createUserParams) async {
+  Future<PatientResponse> login(loginParams) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = createUserParams;
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<User>>(Options(
+    final _data = <String, dynamic>{};
+    _data.addAll(loginParams.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<PatientResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              'api/users',
+              'auth/login',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    var value = _result.data!
-        .map((dynamic i) => User.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = PatientResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<PatientRegisterResponse> register(registerParams) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(registerParams.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PatientRegisterResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'auth/register',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = PatientRegisterResponse.fromJson(_result.data!);
     return value;
   }
 

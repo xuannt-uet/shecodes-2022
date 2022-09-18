@@ -34,7 +34,7 @@ class AppScaffold extends StatelessWidget {
     return WillPopScope(
       onWillPop: _willPopCallback,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColor.backgroundColor,
         appBar: AppBar(
           title: Text(title),
           leading: isBack

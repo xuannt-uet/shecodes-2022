@@ -44,14 +44,16 @@ class BorderedButton extends StatelessWidget {
   final String actionTitle;
   late final double width;
   late final double height;
+  late final bool tapped;
 
   BorderedButton({
     super.key,
     required this.onTap,
     required this.actionTitle,
     this.backgroundColor = AppColor.themeColor,
+    bool? tapped,
     double? width,
-  }) : width = width ?? 40.w;
+  }) : width = width ?? 40.w, tapped = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class BorderedButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColor.themeColor,
+          color: !tapped ? AppColor.themeColor : AppColor.starColor.withOpacity(0.9),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10.sp),
             bottomRight: Radius.circular(10.sp),

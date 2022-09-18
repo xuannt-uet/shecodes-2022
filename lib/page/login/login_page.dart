@@ -77,9 +77,9 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 8.h),
                 CommonButton(
                   onTap: () {
-                    // if (_loginCubit.fbKey.currentState?.saveAndValidate() == true) {
+                    if (_loginCubit.fbKey.currentState?.saveAndValidate() == true) {
                       _loginCubit.login();
-                    // }
+                    }
                   },
                   width: 80.w,
                   actionTitle: 'Login',

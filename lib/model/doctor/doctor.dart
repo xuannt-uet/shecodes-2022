@@ -12,6 +12,7 @@ class Doctor {
   String? description;
   String? avatar;
   double? rating;
+  List<ServiceModel>? serviceModel;
 
   Doctor({
     this.name,
@@ -21,6 +22,7 @@ class Doctor {
     this.description,
     this.avatar,
     this.rating,
+    this.serviceModel,
   });
 
   factory Doctor.fromJson(Map<String, dynamic> json) => _$DoctorFromJson(json);
@@ -29,16 +31,16 @@ class Doctor {
 }
 
 @JsonSerializable()
-class Service {
+class ServiceModel {
   String? name;
   double? price;
   double? rating;
 
-  Service({this.name, this.price, this.rating});
+  ServiceModel({this.name, this.price, this.rating});
 
-  factory Service.fromJson(Map<String, dynamic> json) => _$ServiceFromJson(json);
+  factory ServiceModel.fromJson(Map<String, dynamic> json) => _$ServiceModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ServiceToJson(this);
+  Map<String, dynamic> toJson() => _$ServiceModelToJson(this);
 }
 
 @JsonSerializable()
@@ -51,4 +53,16 @@ class Comment {
   factory Comment.fromJson(Map<String, dynamic> json) => _$CommentFromJson(json);
 
   Map<String, dynamic> toJson() => _$CommentToJson(this);
+}
+
+@JsonSerializable()
+class TimeSlot {
+  DateTime? value;
+  List<DateTime>? freeTime;
+
+  TimeSlot({this.value, this.freeTime});
+
+  factory TimeSlot.fromJson(Map<String, dynamic> json) => _$TimeSlotFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TimeSlotToJson(this);
 }

@@ -1,22 +1,25 @@
+import 'package:get_it/get_it.dart';
 import 'package:shecodes2022/service_locator.dart';
 import 'package:shecodes2022/utils/app_routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shecodes2022/utils/share_preference.dart';
 import 'package:sizer/sizer.dart';
 
-void main() {
+import 'config/appplication.dart';
+
+GetIt getIt = GetIt.instance;
+Future<void> main() async {
   ServiceLocator.setupDependencies();
   WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setSystemUIOverlayStyle(
-  //   const SystemUiOverlayStyle(
-  //     statusBarColor: Colors.transparent,
-  //     systemNavigationBarColor: Colors.transparent,
-  //     systemNavigationBarIconBrightness: Brightness.dark,
-  //     systemNavigationBarDividerColor: Colors.transparent,
-  //   ),
-  // );
+  var res = await Future.wait([
+    SpUtil.getInstance(),
+  ]);
+  Application.sharePreference = res.last;
+  SpUtil.getInstance();
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -40,7 +43,7 @@ class MyApp extends StatelessWidget {
               ? SystemChrome.setPreferredOrientations(DeviceOrientation.values)
               : SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
           return MaterialApp(
-            initialRoute: RouteDefine.login.name,
+            initialRoute: RouteDefine.splash.name,
             navigatorKey: AppRouting.mainNavigationKey,
             onGenerateRoute: AppRouting.generateMainRoute,
             builder: EasyLoading.init(),

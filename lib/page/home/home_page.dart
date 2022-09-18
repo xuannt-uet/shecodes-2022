@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shecodes2022/config/app_color.dart';
+import 'package:shecodes2022/config/appplication.dart';
 import 'package:shecodes2022/fragment/form_element.dart';
 import 'package:shecodes2022/model/doctor/doctor.dart';
+import 'package:shecodes2022/page/home/home_cubit.dart';
 import 'package:shecodes2022/utils/app_routing.dart';
 import 'package:sizer/sizer.dart';
 
@@ -14,6 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _homeCubit = HomeCubit();
   @override
   void initState() {
     // TODO: implement initState
@@ -21,69 +25,38 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  final doctors = [
-    Doctor(
-        name: 'Doctor 1',
-        rating: 4.5,
-        phoneNumber: '08826362',
-        dateOfBirth: DateTime(1997, 08, 15),
-        address: 'so 1 duong NDC',
-        description: 'ABC good doctor',
-        avatar: 'https://vfdc.com.vn/wp-content/uploads/2020/12/wysiwyg-uploads_1569586526901-doctor.jpg'),
-    Doctor(
-      name: 'Doctor 2',
-      phoneNumber: '08826362',
-      rating: 3.5,
-      dateOfBirth: DateTime(1997, 08, 15),
-      address: 'so 1 duong NDC',
-      description: 'ABC doctor provjp',
-      avatar: 'https://vfdc.com.vn/wp-content/uploads/2020/12/wysiwyg-uploads_1569586526901-doctor.jpg',
-    ),
-    Doctor(
-        name: 'Doctor 1',
-        rating: 5.0,
-        phoneNumber: '08826362',
-        dateOfBirth: DateTime(1997, 08, 15),
-        address: 'so 1 duong NDC',
-        description: 'ABC good doctor, good boy, con trai cua me chua benh bang tay',
-        avatar: 'https://vfdc.com.vn/wp-content/uploads/2020/12/wysiwyg-uploads_1569586526901-doctor.jpg'),
-    Doctor(
-      name: 'Doctor 2',
-      phoneNumber: '08826362',
-      rating: 4.8,
-      dateOfBirth: DateTime(1997, 08, 15),
-      address: 'so 1 duong NDC',
-      description: 'ABC doctor provjp benh nao cung chua duoc nao cung chua duoc',
-      avatar: 'https://vfdc.com.vn/wp-content/uploads/2020/12/wysiwyg-uploads_1569586526901-doctor.jpg',
-    ),
-  ];
-  final img =
-      'https://img.freepik.com/premium-photo/funny-asian-woman-doctor-looks-through-magnifying-glass-patient-wears-medical-face-mask-rubber-gloves-white-background_1258-83743.jpg?w=2000';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.whiteColor,
       appBar: appbarWidget(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                searchBar(),
-                SizedBox(height: 1.h),
-                Text(
-                  'Near you:',
-                  style: TextStyle(color: AppColor.textColor, fontSize: 14.sp, fontWeight: FontWeight.w500),
+      body: BlocBuilder<HomeCubit, HomeState>(
+        bloc: _homeCubit,
+        builder: (context, state){
+          if(state is HomeLoading){
+            return const CircularProgressIndicator();
+          }
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    searchBar(),
+                    SizedBox(height: 1.h),
+                    Text(
+                      'Near you:',
+                      style: TextStyle(color: AppColor.textColor, fontSize: 14.sp, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(height: 1.h),
+                    ..._homeCubit.doctors.map((e) => doctorWidget(e)).toList(),
+                  ],
                 ),
-                SizedBox(height: 1.h),
-                ...doctors.map((e) => doctorWidget(e)).toList(),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -96,7 +69,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.only(left: 10),
           child: CircleAvatar(
             radius: 7.w,
-            backgroundImage: NetworkImage(img),
+            backgroundImage: NetworkImage(_homeCubit.img),
             backgroundColor: Colors.transparent,
           ),
         ),
@@ -105,7 +78,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hi, Xuan',
+              'Hi, ${Application.sharePreference.getString('userName')}',
               style: TextStyle(color: AppColor.whiteColor, fontSize: 15.sp, fontWeight: FontWeight.w700),
             ),
             Text(
@@ -118,8 +91,11 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.notifications_none, color: AppColor.whiteColor, size: 24.sp),
+              onPressed: () {
+                Application.sharePreference.clear();
+                Navigator.popAndPushNamed(context, RouteDefine.login.name);
+              },
+              icon: Icon(Icons.logout, color: AppColor.whiteColor, size: 24.sp),
             ),
           )
         ],
@@ -130,7 +106,7 @@ class _HomePageState extends State<HomePage> {
   Widget doctorWidget(Doctor doctor) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, RouteDefine.doctorDetails.name, arguments: doctor.name);
+        Navigator.pushNamed(context, RouteDefine.doctorDetails.name, arguments: doctor);
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 3.h),
@@ -190,7 +166,7 @@ class _HomePageState extends State<HomePage> {
       type: FieldType.search,
       hintText: 'Search',
       onChanged: (dynamic value) {
-        // TO DO search doctor
+
       },
     );
   }

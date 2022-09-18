@@ -51,6 +51,9 @@ dependencies:
   flutter_svg: ^1.1.5
   form_builder_validators: ^8.3.0
   flutter_rating_bar: ^4.0.1
+  intl: ^0.17.0
+  flutter_datetime_picker: ^1.5.1
+  geolocator: ^9.0.1
 
 dev_dependencies:
   flutter_test:
@@ -63,7 +66,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
   pretty_dio_logger: ^1.1.1
-  build_runner: ^2.2.0
+  build_runner: ^2.2.1
   retrofit_generator: ^4.0.3+2
 
 # For information on the generic Dart part of this file, see the
@@ -76,6 +79,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/
   fonts:
     - family: Amiko
       fonts:

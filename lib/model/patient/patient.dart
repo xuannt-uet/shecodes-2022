@@ -22,3 +22,32 @@ class Patient {
 
   Map<String, dynamic> toJson() => _$PatientToJson(this);
 }
+
+@JsonSerializable()
+class PatientResponse {
+  Patient? user;
+  String? token;
+  String? session;
+
+  PatientResponse({
+    this.user,
+    this.session,
+    this.token,
+  });
+
+  factory PatientResponse.fromJson(Map<String, dynamic> json) => _$PatientResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PatientResponseToJson(this);
+}
+
+@JsonSerializable()
+class PatientRegisterResponse {
+  Patient? result;
+  bool? success;
+
+  PatientRegisterResponse({this.result, this.success});
+
+  factory PatientRegisterResponse.fromJson(Map<String, dynamic> json) => _$PatientRegisterResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PatientRegisterResponseToJson(this);
+}

@@ -159,8 +159,6 @@ class _FormElementState extends State<FormElement> {
 
                   case FieldType.dateTime:
                     return FormBuilderDateTimePicker(
-                      maxLines: 1,
-                      inputFormatters: widget.inputFormatters,
                       controller: widget.controller,
                       initialValue: widget.initialValue,
                       onChanged: widget.onChanged,
